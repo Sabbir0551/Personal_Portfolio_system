@@ -1,0 +1,1002 @@
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio Website System | প্ল্যানিং</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    /* ── Base ── */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #0b0d17;
+      color: #e2e8f0;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #131626;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #4f46e5;
+      border-radius: 10px;
+    }
+    /* ── Glassmorphism ── */
+    .glass {
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 24px;
+      box-shadow: 0 20px 60px -12px rgba(0, 0, 0, 0.6);
+    }
+    .glass-dark {
+      background: rgba(11, 13, 23, 0.72);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    /* ── Gradient text ── */
+    .gradient-text {
+      background: linear-gradient(135deg, #818cf8, #c084fc, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .gradient-text-green {
+      background: linear-gradient(135deg, #34d399, #22d3ee, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    /* ── Glow ── */
+    .glow-border {
+      position: relative;
+    }
+    .glow-border::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      background: linear-gradient(135deg, rgba(129, 140, 248, 0.5), rgba(192, 132, 252, 0.3), rgba(244, 114, 182, 0.2));
+      z-index: -1;
+      opacity: 0.6;
+      transition: opacity 0.4s;
+    }
+    .glow-border:hover::before {
+      opacity: 1;
+    }
+    /* ── Animated bg ── */
+    .bg-animated {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(79, 70, 229, 0.12) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(192, 132, 252, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 80%, rgba(52, 211, 153, 0.06) 0%, transparent 50%),
+        #0b0d17;
+    }
+    .bg-animated::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(2px 2px at 20% 30%, rgba(255, 255, 255, 0.08), transparent),
+        radial-gradient(2px 2px at 40% 70%, rgba(255, 255, 255, 0.05), transparent),
+        radial-gradient(2px 2px at 60% 20%, rgba(255, 255, 255, 0.07), transparent),
+        radial-gradient(2px 2px at 80% 50%, rgba(255, 255, 255, 0.04), transparent);
+      background-size: 200px 200px;
+      animation: twinkle 12s ease-in-out infinite alternate;
+    }
+    @keyframes twinkle {
+      0% {
+        opacity: 0.4;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+    /* ── Floating particles ── */
+    .particle {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      background: rgba(129, 140, 248, 0.15);
+      animation: float 18s infinite ease-in-out;
+      z-index: -1;
+    }
+    @keyframes float {
+      0%,
+      100% {
+        transform: translateY(0) scale(1);
+      }
+      50% {
+        transform: translateY(-40px) scale(1.1);
+      }
+    }
+    /* ── Timeline ── */
+    .timeline-line {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, transparent, #4f46e5, transparent);
+      transform: translateX(-50%);
+    }
+    @media (max-width: 640px) {
+      .timeline-line {
+        left: 24px;
+      }
+    }
+    /* ── Step card ── */
+    .step-card {
+      transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .step-card:hover {
+      transform: translateY(-4px) scale(1.01);
+      box-shadow: 0 24px 48px -12px rgba(79, 70, 229, 0.25);
+    }
+    /* ── Feature icon ── */
+    .feature-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      transition: all 0.3s;
+    }
+    .step-card:hover .feature-icon {
+      transform: scale(1.1) rotate(-3deg);
+    }
+    /* ── Progress bar ── */
+    .progress-fill {
+      background: linear-gradient(90deg, #4f46e5, #818cf8, #c084fc);
+      background-size: 200% 100%;
+      animation: shimmer 3s ease-in-out infinite;
+    }
+    @keyframes shimmer {
+      0%,
+      100% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+    }
+    /* ── Tag ── */
+    .tag {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 100px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      background: rgba(79, 70, 229, 0.15);
+      color: #a5b4fc;
+      border: 1px solid rgba(79, 70, 229, 0.2);
+    }
+    .tag-green {
+      background: rgba(52, 211, 153, 0.12);
+      color: #6ee7b7;
+      border-color: rgba(52, 211, 153, 0.2);
+    }
+    .tag-pink {
+      background: rgba(244, 114, 182, 0.12);
+      color: #f9a8d4;
+      border-color: rgba(244, 114, 182, 0.2);
+    }
+    /* ── Typography ── */
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #64748b;
+      font-weight: 600;
+    }
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .glass {
+        border-radius: 16px;
+      }
+    }
+    /* ── Smooth reveal ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* ── Nav pulse ── */
+    .nav-cta {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      border: none;
+      color: #fff;
+      padding: 10px 28px;
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 20px rgba(79, 70, 229, 0.3);
+    }
+    .nav-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(79, 70, 229, 0.45);
+    }
+    /* ── Accordion style ── */
+    .accordion-header {
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.3s;
+      border-radius: 12px;
+      padding: 16px 20px;
+    }
+    .accordion-header:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .accordion-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease, padding 0.3s ease;
+      padding: 0 20px;
+    }
+    .accordion-body.open {
+      max-height: 600px;
+      padding: 0 20px 20px;
+    }
+    .accordion-arrow {
+      transition: transform 0.35s;
+    }
+    .accordion-arrow.rotated {
+      transform: rotate(180deg);
+    }
+    /* ── Stat counter ── */
+    .stat-number {
+      font-size: 2.8rem;
+      font-weight: 800;
+      line-height: 1;
+      background: linear-gradient(135deg, #e2e8f0, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    @media (max-width: 640px) {
+      .stat-number {
+        font-size: 2rem;
+      }
+    }
+    /* ── Dot nav ── */
+    .dot-nav {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .dot.active {
+      background: #4f46e5;
+      box-shadow: 0 0 16px rgba(79, 70, 229, 0.5);
+      width: 28px;
+      border-radius: 6px;
+    }
+    .dot:hover {
+      background: rgba(129, 140, 248, 0.5);
+    }
+    /* ── Hero badge ── */
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 18px 6px 12px;
+      border-radius: 100px;
+      background: rgba(52, 211, 153, 0.08);
+      border: 1px solid rgba(52, 211, 153, 0.15);
+      color: #6ee7b7;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    .hero-badge i {
+      font-size: 0.7rem;
+    }
+    /* ── Divider ── */
+    .divider-gradient {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(129, 140, 248, 0.3), transparent);
+      margin: 40px 0;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ─── Animated Background ─── -->
+  <div class="bg-animated"></div>
+
+  <!-- Floating Particles -->
+  <div class="particle" style="width:400px;height:400px;top:-100px;right:-100px;animation-delay:0s;"></div>
+  <div class="particle" style="width:300px;height:300px;bottom:10%;left:-80px;animation-delay:4s;background:rgba(192,132,252,0.08);"></div>
+  <div class="particle" style="width:200px;height:200px;top:40%;right:10%;animation-delay:8s;background:rgba(52,211,153,0.06);"></div>
+
+  <!-- ─── NAVBAR ─── -->
+  <nav class="fixed top-0 left-0 right-0 z-50 glass-dark border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-indigo-500/20">
+          <i class="fas fa-cube"></i>
+        </div>
+        <span class="font-bold text-lg tracking-tight text-white/90">Portfolio<span class="gradient-text">Forge</span></span>
+      </div>
+      <div class="flex items-center gap-4">
+        <span class="hidden sm:inline text-xs text-slate-400">ড্যাশবোর্ড</span>
+        <button class="nav-cta"><i class="fas fa-rocket mr-2"></i>শুরু করুন</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ─── HERO ─── -->
+  <section class="pt-32 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div class="flex flex-col items-center text-center reveal">
+      <div class="hero-badge mb-6">
+        <i class="fas fa-sparkles"></i>
+        v2.0 — স্মার্ট পোর্টফোলিও প্ল্যাটফর্ম
+      </div>
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight">
+        তোমার গল্প,<br />
+        <span class="gradient-text">অসাধারণভাবে নেটওয়ার্ক</span>
+      </h1>
+      <p class="mt-6 text-lg sm:text-xl text-slate-400 max-w-2xl leading-relaxed">
+        যে কেউ লগইন করে নিজের মতো করে পোর্টফোলিও তৈরি করতে পারবে —
+        ড্র্যাগ-অন-ড্রপ, কাস্টম থিম, অটো ডেভেলপমেন্ট এবং আরও অনেক মজার ফিচার।
+        <span class="text-indigo-300">এটি শুধু একটি প্ল্যানিং দেখায়, এটি একটি ভিশন।</span>
+      </p>
+      <div class="mt-8 flex flex-wrap gap-4 justify-center">
+        <button class="nav-cta text-base px-8 py-3"><i class="fas fa-play mr-2"></i>প্ল্যাটফর্ম ডেমো</button>
+        <button class="glass px-8 py-3 text-slate-300 font-medium text-base rounded-full border border-white/10 hover:border-indigo-500/30 transition-all hover:bg-white/5">
+          <i class="fas fa-file-lines mr-2 text-indigo-400"></i>পূর্ণ প্ল্যান ডাউনলোড
+        </button>
+      </div>
+
+      <!-- Stats -->
+      <div class="mt-14 grid grid-cols-2 sm:grid-cols-4 gap-6 w-full max-w-3xl">
+        <div class="glass px-4 py-5 text-center">
+          <div class="stat-number">50+</div>
+          <div class="text-xs text-slate-500 mt-1">কাস্টম টেমপ্লেট</div>
+        </div>
+        <div class="glass px-4 py-5 text-center">
+          <div class="stat-number">12K</div>
+          <div class="text-xs text-slate-500 mt-1">এক্টিভ ইউজার</div>
+        </div>
+        <div class="glass px-4 py-5 text-center">
+          <div class="stat-number">99.9%</div>
+          <div class="text-xs text-slate-500 mt-1">আপটাইম গ্যারান্টি</div>
+        </div>
+        <div class="glass px-4 py-5 text-center">
+          <div class="stat-number">4.9★</div>
+          <div class="text-xs text-slate-500 mt-1">ইউজার রেটিং</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── DIVIDER ─── -->
+  <div class="divider-gradient max-w-7xl mx-auto px-4"></div>
+
+  <!-- ─── ARCHITECTURE OVERVIEW ─── -->
+  <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" id="architecture">
+    <div class="text-center mb-14 reveal">
+      <span class="section-label">সিস্টেম আর্কিটেকচার</span>
+      <h2 class="text-3xl sm:text-4xl font-bold mt-3">কিভাবে এটি <span class="gradient-text">তৈরি হবে</span></h2>
+      <p class="text-slate-400 mt-3 max-w-xl mx-auto">মডার্ন মাইক্রোসার্ভিস + রিয়েল-টাইম কাস্টমাইজেশন ইঞ্জিন</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-5">
+      <!-- Layer 1 -->
+      <div class="glass p-6 reveal step-card glow-border" style="transition-delay:0.1s;">
+        <div class="feature-icon bg-indigo-500/10 text-indigo-400 mb-5">
+          <i class="fas fa-globe"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">🌐 ফ্রন্টএন্ড লেয়ার</h3>
+        <p class="text-sm text-slate-400 mb-4">React / Next.js — ইউজার ইন্টারফেস, ড্র্যাগ-অন-ড্রপ এডিটর, লাইভ প্রিভিউ এবং পাবলিশড পোর্টফোলিও ভিউয়ার</p>
+        <div class="flex flex-wrap gap-2">
+          <span class="tag">React 18</span>
+          <span class="tag tag-green">Tailwind</span>
+          <span class="tag tag-pink">Framer Motion</span>
+        </div>
+      </div>
+
+      <!-- Layer 2 -->
+      <div class="glass p-6 reveal step-card glow-border" style="transition-delay:0.2s;">
+        <div class="feature-icon bg-emerald-500/10 text-emerald-400 mb-5">
+          <i class="fas fa-server"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">⚙️ ব্যাকএন্ড লেয়ার</h3>
+        <p class="text-sm text-slate-400 mb-4">Node.js + Express / NestJS — REST + GraphQL API, ইউজার ম্যানেজমেন্ট, টেমপ্লেট ইঞ্জিন, রিয়েল-টাইম সিঙ্ক</p>
+        <div class="flex flex-wrap gap-2">
+          <span class="tag">Node.js</span>
+          <span class="tag tag-green">GraphQL</span>
+          <span class="tag tag-pink">WebSocket</span>
+          <span class="tag">Prisma</span>
+        </div>
+      </div>
+
+      <!-- Layer 3 -->
+      <div class="glass p-6 reveal step-card glow-border" style="transition-delay:0.3s;">
+        <div class="feature-icon bg-purple-500/10 text-purple-400 mb-5">
+          <i class="fas fa-database"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">🗄️ ডেটা লেয়ার</h3>
+        <p class="text-sm text-slate-400 mb-4">PostgreSQL — ইউজার, প্রজেক্ট, কাস্টমাইজেশন সেটিংস সংরক্ষণ। Redis ক্যাশিং + CDN ফাইল স্টোরেজ</p>
+        <div class="flex flex-wrap gap-2">
+          <span class="tag">PostgreSQL</span>
+          <span class="tag tag-green">Redis</span>
+          <span class="tag tag-pink">S3 / Cloud</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Flow diagram -->
+    <div class="mt-10 glass p-6 reveal">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-400">
+        <div class="flex items-center gap-3 flex-wrap justify-center">
+          <span class="px-4 py-2 rounded-full bg-indigo-500/10 text-indigo-300 font-mono text-xs border border-indigo-500/10">ইউজার</span>
+          <i class="fas fa-arrow-right text-indigo-500/40"></i>
+          <span class="px-4 py-2 rounded-full bg-emerald-500/10 text-emerald-300 font-mono text-xs border border-emerald-500/10">API গেটওয়ে</span>
+          <i class="fas fa-arrow-right text-emerald-500/40"></i>
+          <span class="px-4 py-2 rounded-full bg-purple-500/10 text-purple-300 font-mono text-xs border border-purple-500/10">মাইক্রোসার্ভিস</span>
+          <i class="fas fa-arrow-right text-purple-500/40"></i>
+          <span class="px-4 py-2 rounded-full bg-amber-500/10 text-amber-300 font-mono text-xs border border-amber-500/10">ডেটাবেজ</span>
+        </div>
+        <span class="text-xs text-slate-500 hidden sm:inline">← রিয়েল-টাইম ডেটা ফ্লো →</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── DIVIDER ─── -->
+  <div class="divider-gradient max-w-7xl mx-auto px-4"></div>
+
+  <!-- ─── CORE FEATURES ─── -->
+  <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" id="features">
+    <div class="text-center mb-14 reveal">
+      <span class="section-label">কোর ফিচার</span>
+      <h2 class="text-3xl sm:text-4xl font-bold mt-3">সবকিছুই <span class="gradient-text">ইউনিক ও স্পেশাল</span></h2>
+      <p class="text-slate-400 mt-3 max-w-xl mx-auto">যেকোনো ইউজার সহজেই তার পোর্টফোলিও কাস্টমাইজ করতে পারবে</p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <!-- Feature 1 -->
+      <div class="glass p-6 reveal step-card glow-border" style="transition-delay:0.05s;">
+        <div class="feature-icon bg-gradient-to-br from-indigo-400 to-purple-500 text-white shadow-lg shadow-indigo-500/20 mb-5">
+          <i class="fas fa-wand-magic-sparkles"></i>
+        </div>
+        <h3 class="text-lg font-bold mb-2">🎨 ড্র্যাগ-অন-ড্রপ এডিটর</h3>
+        <p class="text-sm text-slate-400 mb-3">কোনো কোড না লিখে পোর্টফোলিও ডিজাইন করুন। ব্লক, লেআউট, কালার — সব ক্লিকে কন্ট্রোল।</p>
+        <div class="flex items-center gap-2 text-xs text-slate-500">
+          <i class="fas fa-check-circle text-emerald-400"></i> লাইভ প্রিভিউ &nbsp;·&nbsp; <i class="fas fa-check-circle text-emerald-400"></i> সেভ অটোমেটিক
+        </div>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="glass p-6 reveal step-card glow-border" style="transition-delay:0.1s;">
+        <div class="feature-icon bg-gradient-to-br from-emerald-400 to-teal-500 text-white shadow-lg shadow-emerald-500/20 mb-5">
+          <i class="fas fa-palette"></i>
+        </div>
+        <h3 class="text-lg font-bold mb-2">🎭 ১০০+ কাস্টম থিম</h3>
+        ダーク, লাইট, গ্লাসমরফিজম, নিয়ন-গ্লো — প্রিসেট থিম বা নিজের থিম বানান। কালার পিকার, ফন্ট কন্ট্রোল।</p>
+        <div class="flex items-center gap-2 text-xs text-slate-500">
+          <i class="fas fa-check-circle text-emerald-400"></i> প্রিসেট &nbsp;·&nbsp; <i class="fas fa-check-circle text-emerald-400"></i> কাস্টম CSS
+        </div>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="glass p-6 reveal step-card glow-border" style="transition-delay:0.15s;">
+        <div class="feature-icon bg-gradient-to-br from-rose-400 to-pink-500 text-white shadow-lg shadow-rose-500/20 mb-5">
+          <i class="fas fa-robot"></i>
+        </div>
+        <h3 class="text-lg font-bold mb-2">🤖 AI পোর্টফোলিও জেনারেটর</h3>
+        <p class="text-sm text-slate-400 mb-3">আপনার তথ্য দিন, AI আপনার জন্য স্টাইলিশ পোর্টফোলিও তৈরি করে দেবে। রีวিউ করে কাস্টমাইজ করুন।</p>
+        <div class="flex items-center gap-2 text-xs text-slate-500">
+          <i class="fas fa-check-circle text-emerald-400"></i> LLM পাওয়ার্ড &nbsp;·&nbsp; <i class="fas fa-check-circle text-emerald-400"></i> মাল্টি-লিংগুয়াল
+        </div>
+      </div>
+
+      <!-- Feature 4 -->
+      <div class="glass p-6 reveal step-card glow-border" style="transition-delay:0.2s;">
+        <div class="feature-icon bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-lg shadow-amber-500/20 mb-5">
+          <i class="fas fa-share-nodes"></i>
+        </div>
+        <h3 class="text-lg font-bold mb-2">🔗 সোশ্যাল ও মেট্রিক্স</h3>
+        <p class="text-sm text-slate-400 mb-3">পোর্টফোলিও শেয়ার করুন, ভিউ কাউন্ট দেখুন, কন্টাক্ট ফর্ম, সোশ্যাল লিংক — সব এক জায়গায়।</p>
+        <div class="flex items-center gap-2 text-xs text-slate-500">
+          <i class="fas fa-check-circle text-emerald-400"></i> Analytics &nbsp;·&nbsp; <i class="fas fa-check-circle text-emerald-400"></i> ডায়নামিক ফর্ম
+        </div>
+      </div>
+
+      <!-- Feature 5 -->
+      <div class="glass p-6 reveal step-card glow-border" style="transition-delay:0.25s;">
+        <div class="feature-icon bg-gradient-to-br from-sky-400 to-blue-500 text-white shadow-lg shadow-sky-500/20 mb-5">
+          <i class="fas fa-mobile-screen-button"></i>
+        </div>
+        <h3 class="text-lg font-bold mb-2">📱 রেসপন্সিভ + PWA</h3>
+        <p class="text-sm text-slate-400 mb-3">মোবাইলে সুন্দর দেখা যায়। PWA সাপোর্ট — অফলাইনেও কিছুটা কাজ করে। অ্যাপের মতো অভিজ্ঞতা।</p>
+        <div class="flex items-center gap-2 text-xs text-slate-500">
+          <i class="fas fa-check-circle text-emerald-400"></i> PWA &nbsp;·&nbsp; <i class="fas fa-check-circle text-emerald-400"></i> ১০০% রেসপন্সিভ
+        </div>
+      </div>
+
+      <!-- Feature 6 -->
+      <div class="glass p-6 reveal step-card glow-border" style="transition-delay:0.3s;">
+        <div class="feature-icon bg-gradient-to-br from-violet-400 to-fuchsia-500 text-white shadow-lg shadow-violet-500/20 mb-5">
+          <i class="fas fa-lock"></i>
+        </div>
+        <h3 class="text-lg font-bold mb-2">🔐 সিকিউর লগইন + ড্যাশবোর্ড</h3>
+        <p class="text-sm text-slate-400 mb-3">OAuth (Google, GitHub), ইমেইল/পাসওয়ার্ড, 2FA — সবচেয়ে নিরাপদ লগইন সিস্টেম। প্রাইভেট পোর্টফোলিও।</p>
+        <div class="flex items-center gap-2 text-xs text-slate-500">
+          <i class="fas fa-check-circle text-emerald-400"></i> OAuth &nbsp;·&nbsp; <i class="fas fa-check-circle text-emerald-400"></i> 2FA &nbsp;·&nbsp; <i class="fas fa-check-circle text-emerald-400"></i> JWT
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── DIVIDER ─── -->
+  <div class="divider-gradient max-w-7xl mx-auto px-4"></div>
+
+  <!-- ─── DEVELOPMENT ROADMAP (Timeline) ─── -->
+  <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" id="roadmap">
+    <div class="text-center mb-14 reveal">
+      <span class="section-label">ডেভেলপমেন্ট রোডম্যাপ</span>
+      <h2 class="text-3xl sm:text-4xl font-bold mt-3">ধাপে ধাপে <span class="gradient-text">প্রগতি</span></h2>
+      <p class="text-slate-400 mt-3 max-w-xl mx-auto">প্রতিটি ধাপে নতুন ফিচার — ফাইনালি পৌঁছবে পূর্ণাঙ্গ প্ল্যাটফর্ম</p>
+    </div>
+
+    <div class="relative max-w-4xl mx-auto">
+      <!-- Timeline line -->
+      <div class="timeline-line"></div>
+
+      <!-- Steps -->
+      <div class="space-y-10">
+        <!-- Phase 1 -->
+        <div class="relative flex items-start gap-6 md:gap-10 reveal" style="transition-delay:0.1s;">
+          <div class="hidden md:block w-1/2 text-right pr-8">
+            <span class="tag tag-green">Phase ১</span>
+            <div class="mt-2 text-sm font-medium text-white/90">ফাউন্ডেশন ও লগইন সিস্টেম</div>
+            <div class="text-xs text-slate-500 mt-1">সপ্তাহ ১–৪</div>
+          </div>
+          <div class="flex items-start gap-4 w-full md:w-auto md:flex-[0_0_40%]">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-indigo-500/20 flex-shrink-0">১</div>
+            <div class="glass p-5 w-full md:w-auto">
+              <h3 class="font-bold text-base">ইউজার অথেন্টিকেশন</h3>
+              <ul class="text-sm text-slate-400 mt-2 space-y-1 list-disc list-inside">
+                <li>ইমেইল/পাসওয়ার্ড + OAuth (Google, GitHub)</li>
+                <li>JWT + 2FA ওয়েবহুড</li>
+                <li>ইউজার প্রোফাইল ড্যাশবোর্ড (বেসিক)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 2 -->
+        <div class="relative flex items-start gap-6 md:gap-10 reveal" style="transition-delay:0.2s;">
+          <div class="flex items-start gap-4 w-full md:w-auto md:flex-[0_0_40%]">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-emerald-500/20 flex-shrink-0">২</div>
+            <div class="glass p-5 w-full md:w-auto">
+              <h3 class="font-bold text-base">টেমপ্লেট ইঞ্জিন + এডিটর</h3>
+              <ul class="text-sm text-slate-400 mt-2 space-y-1 list-disc list-inside">
+                <li>৫টি প্রাইমারি টেমপ্লেট (ফুল-CSS, রেসপন্সিভ)</li>
+                <li>ড্র্যাগ-অন-ড্রপ ব্লক এডিটর (React DnD)</li>
+                <li>লাইভ প্রিভিউ উইণ্ডো</li>
+              </ul>
+            </div>
+          </div>
+          <div class="hidden md:block w-1/2 pl-8">
+            <span class="tag tag-green">Phase ২</span>
+            <div class="mt-2 text-sm font-medium text-white/90">টেমপ্লেট ও এডিটিং কোর</div>
+            <div class="text-xs text-slate-500 mt-1">সপ্তাহ ৫–৮</div>
+          </div>
+        </div>
+
+        <!-- Phase 3 -->
+        <div class="relative flex items-start gap-6 md:gap-10 reveal" style="transition-delay:0.3s;">
+          <div class="hidden md:block w-1/2 text-right pr-8">
+            <span class="tag tag-green">Phase ৩</span>
+            <div class="mt-2 text-sm font-medium text-white/90">থিম কাস্টমাইজেশন + AI</div>
+            <div class="text-xs text-slate-500 mt-1">সপ্তাহ ৯–১২</div>
+          </div>
+          <div class="flex items-start gap-4 w-full md:w-auto md:flex-[0_0_40%]">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-rose-500/20 flex-shrink-0">৩</div>
+            <div class="glass p-5 w-full md:w-auto">
+              <h3 class="font-bold text-base">থিম ও AI ক্ষমতা</h3>
+              <ul class="text-sm text-slate-400 mt-2 space-y-1 list-disc list-inside">
+                <li>কালার পিকার, ফন্ট, স্পেসিং কন্ট্রোল</li>
+                <li>AI পোর্টফোলিও জেনারেটর (LLM API)</li>
+                <li>কাস্টম CSS ইনজেকশন</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 4 -->
+        <div class="relative flex items-start gap-6 md:gap-10 reveal" style="transition-delay:0.4s;">
+          <div class="flex items-start gap-4 w-full md:w-auto md:flex-[0_0_40%]">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-amber-500/20 flex-shrink-0">৪</div>
+            <div class="glass p-5 w-full md:w-auto">
+              <h3 class="font-bold text-base">পাবলিশিং + অ্যানালিটিক্স</h3>
+              <ul class="text-sm text-slate-400 mt-2 space-y-1 list-disc list-inside">
+                <li>কাস্টম ডোমেইন সাপোর্ট (ভাড়া)</li>
+                <li>ভিউ অ্যানালিটিক্স, জিও, ডিভাইস ড্যাশবোর্ড</li>
+                <li>PWA + অফলাইন ক্যাশ</li>
+              </ul>
+            </div>
+          </div>
+          <div class="hidden md:block w-1/2 pl-8">
+            <span class="tag tag-green">Phase ৪</span>
+            <div class="mt-2 text-sm font-medium text-white/90">পাবলিশ + অ্যানালিটিক্স</div>
+            <div class="text-xs text-slate-500 mt-1">সপ্তাহ ১৩–১৬</div>
+          </div>
+        </div>
+
+        <!-- Phase 5 -->
+        <div class="relative flex items-start gap-6 md:gap-10 reveal" style="transition-delay:0.5s;">
+          <div class="hidden md:block w-1/2 text-right pr-8">
+            <span class="tag tag-pink">Phase ৫</span>
+            <div class="mt-2 text-sm font-medium text-white/90">মার্কেটপ্লেস + উন্নত ফিচার</div>
+            <div class="text-xs text-slate-500 mt-1">সপ্তাহ ১৭–২৪</div>
+          </div>
+          <div class="flex items-start gap-4 w-full md:w-auto md:flex-[0_0_40%]">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-600 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-violet-500/20 flex-shrink-0">৫</div>
+            <div class="glass p-5 w-full md:w-auto">
+              <h3 class="font-bold text-base">মার্কেটপ্লেস ও গ্রোথ</h3>
+              <ul class="text-sm text-slate-400 mt-2 space-y-1 list-disc list-inside">
+                <li>টেমপ্লেট মার্কেটপ্লেস (ইউজাররা থেকে বিক্রি করতে পারবে)</li>
+                <li>কোম্পানি প্ল্যান, কাস্টম ডোমেইন, SSL</li>
+                <li>মাল্টি-লিংগুয়াল সাপোর্ট (বাংলা + ইংরেজি)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dot nav -->
+      <div class="dot-nav">
+        <div class="dot active" data-step="1"></div>
+        <div class="dot" data-step="2"></div>
+        <div class="dot" data-step="3"></div>
+        <div class="dot" data-step="4"></div>
+        <div class="dot" data-step="5"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── DIVIDER ─── -->
+  <div class="divider-gradient max-w-7xl mx-auto px-4"></div>
+
+  <!-- ─── DATABASE SCHEMA OVERVIEW ─── -->
+  <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" id="database">
+    <div class="text-center mb-14 reveal">
+      <span class="section-label">ডেটাবেজ স্কিমা</span>
+      <h2 class="text-3xl sm:text-4xl font-bold mt-3">ডেটা কাঠামো <span class="gradient-text">অ্যাট অ্যা গ্ল্যান্স</span></h2>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 reveal">
+      <div class="glass p-5 text-center">
+        <div class="text-2xl mb-2">👤</div>
+        <h4 class="font-bold text-sm">users</h4>
+        <p class="text-xs text-slate-500 mt-1">id, name, email, password_hash, avatar, role, preferences_json</p>
+      </div>
+      <div class="glass p-5 text-center">
+        <div class="text-2xl mb-2">📁</div>
+        <h4 class="font-bold text-sm">portfolios</h4>
+        <p class="text-xs text-slate-500 mt-1">id, user_id, title, theme_json, content_json, is_published, custom_domain</p>
+      </div>
+      <div class="glass p-5 text-center">
+        <div class="text-2xl mb-2">🧩</div>
+        <h4 class="font-bold text-sm">blocks</h4>
+        <p class="text-xs text-slate-500 mt-1">id, portfolio_id, type, order, data_json, style_json</p>
+      </div>
+      <div class="glass p-5 text-center">
+        <div class="text-2xl mb-2">📊</div>
+        <h4 class="font-bold text-sm">analytics</h4>
+        <p class="text-xs text-slate-500 mt-1">id, portfolio_id, views, unique_views, geo, device, referrer</p>
+      </div>
+    </div>
+
+    <div class="mt-6 glass p-5 reveal text-sm text-slate-400 text-center">
+      <i class="fas fa-info-circle text-indigo-400 mr-2"></i>
+      <span>প্রতিটি ইউজার তার সব পোর্টফোলিও ম্যানেজ করতে পারবে — <strong>মাল্টি-পোর্টফোলিও সাপোর্ট</strong>।</span>
+    </div>
+  </section>
+
+  <!-- ─── DIVIDER ─── -->
+  <div class="divider-gradient max-w-7xl mx-auto px-4"></div>
+
+  <!-- ─── SPECIAL UNIQUE FEATURES ─── -->
+  <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" id="special">
+    <div class="text-center mb-14 reveal">
+      <span class="section-label">স্পেশাল ফিচার</span>
+      <h2 class="text-3xl sm:text-4xl font-bold mt-3">যা <span class="gradient-text">অন্য কোথাও নেই</span></h2>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-5">
+      <div class="glass p-6 reveal step-card glow-border" style="transition-delay:0.05s;">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-fuchsia-500 to-pink-600 flex items-center justify-center text-white text-xl shadow-lg shadow-fuchsia-500/20 flex-shrink-0">
+            <i class="fas fa-gem"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-base">🔮 ফিউচার-প্রুফ আর্কিটেকচার</h3>
+            <p class="text-sm text-slate-400 mt-1">মডুলার ডিজাইন — নতুন ফিচার যোগ করতে পুরো সিস্টেম নয়, শুধু মডিউল।</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass p-6 reveal step-card glow-border" style="transition-delay:0.1s;">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-sky-600 flex items-center justify-center text-white text-xl shadow-lg shadow-cyan-500/20 flex-shrink-0">
+            <i class="fas fa-bolt"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-base">⚡ রিয়েল-টাইম কোলাবোরেশন</h3>
+            <p class="text-sm text-slate-400 mt-1">একাধিক ইউজার একই পোর্টফোলিও এডিট করতে পারবে (ওয়েবসকেট পাওয়ার্ড)।</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass p-6 reveal step-card glow-border" style="transition-delay:0.15s;">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-lime-500 to-green-600 flex items-center justify-center text-white text-xl shadow-lg shadow-lime-500/20 flex-shrink-0">
+            <i class="fas fa-gift"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-base">🎁 থিম মার্কেটপ্লেস</h3>
+            <p class="text-sm text-slate-400 mt-1">ইউজাররা তাদের ডিজাইন করা থিম বিক্রি করতে পারবে — রেভিনিউ শেয়ারিং।</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass p-6 reveal step-card glow-border" style="transition-delay:0.2s;">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center text-white text-xl shadow-lg shadow-amber-500/20 flex-shrink-0">
+            <i class="fas fa-earth-asia"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-base">🌏 বাংলা + ইংরেজি ফুল সাপোর্ট</h3>
+            <p class="text-sm text-slate-400 mt-1">ইন্টারফেস, টেমপ্লেট, AI — সব বাংলা ও ইংরেজি দুটো ভাষায়।</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass p-6 reveal step-card glow-border" style="transition-delay:0.25s;">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-red-500 to-rose-600 flex items-center justify-center text-white text-xl shadow-lg shadow-red-500/20 flex-shrink-0">
+            <i class="fas fa-shield-halved"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-base">🛡️ প্রাইভেট পোর্টফোলিও</h3>
+            <p class="text-sm text-slate-400 mt-1">পাসওয়ার্ড প্রোটেকশন, পাসওয়ার্ড লিংক শেয়ার — নিরাপদে শেয়ার করুন।</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass p-6 reveal step-card glow-border" style="transition-delay:0.3s;">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-xl shadow-lg shadow-blue-500/20 flex-shrink-0">
+            <i class="fas fa-download"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-base">📦 পোর্টফোলিও এক্সপোর্ট</h3>
+            <p class="text-sm text-slate-400 mt-1">HTML/CSS/JS হিসেবে ডাউনলোড — সার্ভার ছাড়াই হোস্ট করতে পারবে।</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── DIVIDER ─── -->
+  <div class="divider-gradient max-w-7xl mx-auto px-4"></div>
+
+  <!-- ─── TECH STACK TAGS ─── -->
+  <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" id="tech">
+    <div class="text-center mb-10 reveal">
+      <span class="section-label">টেকনোলজি স্ট্যাক</span>
+      <h2 class="text-3xl sm:text-4xl font-bold mt-2">কী দিয়ে <span class="gradient-text">বানাবো</span></h2>
+    </div>
+
+    <div class="flex flex-wrap justify-center gap-3 reveal">
+      <span class="glass px-5 py-3 text-sm font-medium text-slate-300 border-white/5 hover:border-indigo-500/30 transition-all cursor-default">⚛️ React / Next.js</span>
+      <span class="glass px-5 py-3 text-sm font-medium text-slate-300 border-white/5 hover:border-indigo-500/30 transition-all cursor-default">🎨 Tailwind CSS</span>
+      <span class="glass px-5 py-3 text-sm font-medium text-slate-300 border-white/5 hover:border-indigo-500/30 transition-all cursor-default">🟢 Node.js / NestJS</span>
+      <span class="glass px-5 py-3 text-sm font-medium text-slate-300 border-white/5 hover:border-indigo-500/30 transition-all cursor-default">🗃️ PostgreSQL + Prisma</span>
+      <span class="glass px-5 py-3 text-sm font-medium text-slate-300 border-white/5 hover:border-indigo-500/30 transition-all cursor-default">🔴 Redis</span>
+      <span class="glass px-5 py-3 text-sm font-medium text-slate-300 border-white/5 hover:border-indigo-500/30 transition-all cursor-default">🌐 GraphQL / REST</span>
+      <span class="glass px-5 py-3 text-sm font-medium text-slate-300 border-white/5 hover:border-indigo-500/30 transition-all cursor-default">🔌 WebSocket</span>
+      <span class="glass px-5 py-3 text-sm font-medium text-slate-300 border-white/5 hover:border-indigo-500/30 transition-all cursor-default">🔐 JWT + OAuth 2.0</span>
+      <span class="glass px-5 py-3 text-sm font-medium text-slate-300 border-white/5 hover:border-indigo-500/30 transition-all cursor-default">🤖 LLM API (AI)</span>
+      <span class="glass px-5 py-3 text-sm font-medium text-slate-300 border-white/5 hover:border-indigo-500/30 transition-all cursor-default">📦 Docker / K8s</span>
+      <span class="glass px-5 py-3 text-sm font-medium text-slate-300 border-white/5 hover:border-indigo-500/30 transition-all cursor-default">☁️ Vercel / AWS</span>
+      <span class="glass px-5 py-3 text-sm font-medium text-slate-300 border-white/5 hover:border-indigo-500/30 transition-all cursor-default">📱 PWA</span>
+    </div>
+  </section>
+
+  <!-- ─── DIVIDER ─── -->
+  <div class="divider-gradient max-w-7xl mx-auto px-4"></div>
+
+  <!-- ─── FAQ ACCORDION ─── -->
+  <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" id="faq">
+    <div class="text-center mb-12 reveal">
+      <span class="section-label">প্রশ্ন ও উত্তর</span>
+      <h2 class="text-3xl sm:text-4xl font-bold mt-2">জানতে চান <span class="gradient-text">কী?</span></h2>
+    </div>
+
+    <div class="max-w-3xl mx-auto space-y-3 reveal">
+      <!-- Item 1 -->
+      <div class="glass overflow-hidden">
+        <div class="accordion-header flex items-center justify-between" onclick="toggleAccordion(this)">
+          <span class="font-semibold text-sm">ইউজার কি নিজের ডোমেইন ব্যবহার করতে পারবে?</span>
+          <i class="fas fa-chevron-down accordion-arrow text-slate-500"></i>
+        </div>
+        <div class="accordion-body text-sm text-slate-400 leading-relaxed">
+          হ্যাঁ। প্রিমিয়াম প্ল্যানে ইউজার তাদের নিজের কাস্টম ডোমেইন (যেমন: portfolio.yourname.com) সেট করতে পারবে। DNS কনফিগারেশন অটোমেটেড হবে।
+        </div>
+      </div>
+      <!-- Item 2 -->
+      <div class="glass overflow-hidden">
+        <div class="accordion-header flex items-center justify-between" onclick="toggleAccordion(this)">
+          <span class="font-semibold text-sm">AI কি সত্যিই পোর্টফোলিও বানিয়ে দেবে?</span>
+          <i class="fas fa-chevron-down accordion-arrow text-slate-500"></i>
+        </div>
+        <div class="accordion-body text-sm text-slate-400 leading-relaxed">
+          হ্যাঁ। ইউজার তার তথ্য (নাম, পেশা, প্রজেক্ট, স্কিল) দেবে — AI একটি স্টাইলিশ পোর্টফোলিও ড্রাফট তৈরি করবে। ইউজার সেটি রিভিউ করে কাস্টমাইজ করতে পারবে।
+        </div>
+      </div>
+      <!-- Item 3 -->
+      <div class="glass overflow-hidden">
+        <div class="accordion-header flex items-center justify-between" onclick="toggleAccordion(this)">
+          <span class="font-semibold text-sm">এটি মোবাইলে কাজ করবে?</span>
+          <i class="fas fa-chevron-down accordion-arrow text-slate-500"></i>
+        </div>
+        <div class="accordion-body text-sm text-slate-400 leading-relaxed">
+          একদম। ১০০% রেসপন্সিভ ডিজাইন — মোবাইল, ট্যাবলেট, ডেস্কটপ সবে চলবে। PWA সাপোর্ট দিয়ে অফলাইনেও কিছু বৈশিষ্ট্য ব্যবহার করা যাবে।
+        </div>
+      </div>
+      <!-- Item 4 -->
+      <div class="glass overflow-hidden">
+        <div class="accordion-header flex items-center justify-between" onclick="toggleAccordion(this)">
+          <span class="font-semibold text-sm">কাস্টম কোড যোগ করা যাবে?</span>
+          <i class="fas fa-chevron-down accordion-arrow text-slate-500"></i>
+        </div>
+        <div class="accordion-body text-sm text-slate-400 leading-relaxed">
+          হ্যাঁ। ইউজার কাস্টম CSS, JavaScript এবং HTML ইনজেক্ট করতে পারবে। এডিটরে "Custom Code" ব্লক আছে। ডেভেলপাররা স্বাধীনভাবে কাস্টমাইজ করতে পারবে।
+        </div>
+      </div>
+      <!-- Item 5 -->
+      <div class="glass overflow-hidden">
+        <div class="accordion-header flex items-center justify-between" onclick="toggleAccordion(this)">
+          <span class="font-semibold text-sm">পোর্টফোলিও এক্সপোর্ট করা যাবে?</span>
+          <i class="fas fa-chevron-down accordion-arrow text-slate-500"></i>
+        </div>
+        <div class="accordion-body text-sm text-slate-400 leading-relaxed">
+          হ্যাঁ। পুরো পোর্টফোলিও standalone HTML/CSS/JS ফাইল হিসেবে ডাউনলোড করা যাবে। সার্ভার ছাড়াই যেকোনো হোস্টিংয়ে আপলোড করতে পারবে।
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ─── -->
+  <footer class="border-t border-white/5 py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center text-sm text-slate-500">
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-xs">
+          <i class="fas fa-cube"></i>
+        </div>
+        <span class="font-semibold text-slate-400">PortfolioForge</span>
+      </div>
+      <div class="flex gap-6 text-xs">
+        <a href="#" class="hover:text-indigo-300 transition">প্রাইভেসি</a>
+        <a href="#" class="hover:text-indigo-300 transition">টার্মস</a>
+        <a href="#" class="hover:text-indigo-300 transition">সাপোর্ট</a>
+        <a href="#" class="hover:text-indigo-300 transition">অ্যাফিলিয়েট</a>
+      </div>
+      <div class="text-xs">© ২০২৬ · তৈরি করেছে <span class="text-indigo-300">PortfolioForge</span> দিয়ে ❤️</div>
+    </div>
+  </footer>
+
+  <!-- ─── SCRIPTS ─── -->
+  <script>
+    // ─── Scroll Reveal ───
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // ─── FAQ Accordion ───
+    function toggleAccordion(header) {
+      const body = header.nextElementSibling;
+      const arrow = header.querySelector('.accordion-arrow');
+      const isOpen = body.classList.contains('open');
+
+      // Close all
+      document.querySelectorAll('.accordion-body').forEach(b => {
+        b.classList.remove('open');
+        b.previousElementSibling.querySelector('.accordion-arrow').classList.remove('rotated');
+      });
+
+      if (!isOpen) {
+        body.classList.add('open');
+        arrow.classList.add('rotated');
+      }
+    }
+
+    // ─── Dot Nav (Timeline) ───
+    const dots = document.querySelectorAll('.dot');
+    const phases = document.querySelectorAll('.timeline-line + div > div');
+
+    dots.forEach((dot, idx) => {
+      dot.addEventListener('click', () => {
+        dots.forEach(d => d.classList.remove('active'));
+        dot.classList.add('active');
+
+        // Scroll to phase
+        const target = document.querySelector(`#roadmap`);
+        if (target) {
+          const phaseEls = target.querySelectorAll('.relative.flex.items-start');
+          if (phaseEls[idx]) {
+            phaseEls[idx].scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }
+      });
+    });
+
+    // ─── Nav CTA click ───
+    document.querySelector('.nav-cta')?.addEventListener('click', () => {
+      document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // ─── Hero demo button ───
+    document.querySelectorAll('.nav-cta')[1]?.addEventListener('click', () => {
+      document.getElementById('roadmap')?.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // ─── Smooth scroll for in-page links ───
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    console.log('✨ PortfolioForge Planning — স্বাগতম!');
+  </script>
+
+</body>
+</html>
